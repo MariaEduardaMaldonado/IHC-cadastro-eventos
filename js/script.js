@@ -1,6 +1,5 @@
 window.addEventListener('load', loadNavbar);
 window.addEventListener('load', displayEvents);
-window.addEventListener('load', setActiveNavItem);
 window.addEventListener('load', setClickEvent);
 
 function loadNavbar() {
@@ -10,26 +9,6 @@ function loadNavbar() {
             document.getElementById('navbar-placeholder').innerHTML = data;
         })
         .catch(error => console.error('Erro ao carregar a navbar:', error));
-}
-
-function setActiveNavItem() {
-    var navItems = document.querySelectorAll('.navbar-nav .nav-item');
-
-    navItems.forEach(function (item) {
-        item.classList.remove('active');
-    });
-
-    var currentPage = window.location.pathname;
-
-    if (currentPage.includes('index.html')) {
-        document.querySelector('a[href="index.html"]').parentElement.classList.add('active');
-    } else if (currentPage.includes('cadastro.html')) {
-        document.querySelector('a[href="cadastro.html"]').parentElement.classList.add('active');
-    } else if (currentPage.includes('galeria.html')) {
-        document.querySelector('a[href="galeria.html"]').parentElement.classList.add('active');
-    } else if (currentPage.includes('contato.html')) {
-        document.querySelector('a[href="contato.html"]').parentElement.classList.add('active');
-    }
 }
 
 function setClickEvent() {
@@ -49,6 +28,10 @@ function setClickEvent() {
 
 function displayEvents() {
     const eventsList = document.getElementById('events-list');
+    if (!eventsList) {
+        return;
+    }
+
     let events = JSON.parse(localStorage.getItem('events')) || [];
     eventsList.innerHTML = '';
 
@@ -132,3 +115,54 @@ function showFeedback(message) {
         feedbackDiv.remove();
     }, 3000);
 }
+
+function configuracaoAcessibilidadeBotoes() {
+    const btnIncrease = document.getElementById("font-increase");
+    const btnDecrease = document.getElementById("font-decrease");
+    const btnContrast = document.getElementById("contrast-toggle");
+
+    let currentFontSize = parseFloat(localStorage.getItem("fontSize")) || 16;
+    const highContrast = localStorage.getItem("highContrast") === "true";
+
+    document.body.style.fontSize = currentFontSize + "px";
+
+    if (highContrast) {
+        document.body.classList.add("high-contrast");
+    }
+
+    if (btnIncrease && btnDecrease && btnContrast) {
+        const minFontSize = 12;
+        const maxFontSize = 24;
+
+        btnIncrease.addEventListener("click", function () {
+            if (currentFontSize < maxFontSize) {
+                currentFontSize += 2;
+                document.body.style.fontSize = currentFontSize + "px";
+                localStorage.setItem("fontSize", currentFontSize);
+            }
+        });
+
+        btnDecrease.addEventListener("click", function () {
+            if (currentFontSize > minFontSize) {
+                currentFontSize -= 2;
+                document.body.style.fontSize = currentFontSize + "px";
+                localStorage.setItem("fontSize", currentFontSize);
+            }
+        });
+
+        btnContrast.addEventListener("click", function () {
+            document.body.classList.toggle("high-contrast");
+
+            const isHighContrast = document.body.classList.contains("high-contrast");
+            localStorage.setItem("highContrast", isHighContrast);
+        });
+    } else {
+        console.error("Botões de acessibilidade não encontrados no DOM.");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    window.addEventListener("load", function () {
+        setTimeout(configuracaoAcessibilidadeBotoes, 500);
+    });
+});

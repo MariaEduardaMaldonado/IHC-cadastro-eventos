@@ -198,3 +198,35 @@ header h1 {
     visibility: visible;
     opacity: 1;
 }
+
+:focus {
+    outline: 3px solid #f39c12;
+    outline-offset: 2px;
+}
+
+.high-contrast {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+.high-contrast a {
+    color: #0bf !important;
+}
+
+.high-contrast .btn-outline-secondary,
+.high-contrast .btn-outline-dark {
+    background-color: #0f0 !important;
+    color: #000 !important;
+}
+
+.high-contrast .navbar {
+    background-color: #222 !important;
+}
+
+.high-contrast .navbar-nav .nav-link {
+    color: #fff !important;
+}
+
+.high-contrast .navbar-toggler-icon {
+    background-color: #fff !important;
+}
