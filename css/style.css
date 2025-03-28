@@ -126,6 +126,8 @@ header h1 {
 
 .btn-primary {
     background-color: #28a745;
+    width: 90px;
+    height: 45px;
 }
 
 .btn-primary:hover {
@@ -166,6 +168,10 @@ header h1 {
     width: 100px;
     white-space: nowrap;
     background-color: red;
+}
+
+#btn-delete:hover {
+    background-color: rgb(126, 16, 16);
 }
 
 .carousel-img {
@@ -287,5 +293,82 @@ header h1 {
 
     .carousel-indicators .active {
         background-color: #007bff;
+    }
+}
+
+.modal {
+    padding: 20rem 20rem;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 50px;
+    border-radius: 8px;
+    width: 50%;
+}
+
+.modal .modal-content button {
+    margin: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+#confirmYes {
+    background-color: #28a745;
+    color: white;
+}
+
+#confirmYes:hover {
+    background-color: #218838;
+}
+
+
+#confirmNo {
+    background-color: #007bff;
+    color: white;
+}
+
+#confirmNo:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .modal {
+        padding: 5rem;
+    }
+
+    .modal-content {
+        width: 80%;
+        padding: 20px;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 10px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal {
+        padding: 2rem;
+    }
+
+    .modal-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
     }
 }

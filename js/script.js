@@ -1,8 +1,13 @@
-window.addEventListener('load', loadNavbar);
-window.addEventListener('load', displayEvents);
-window.addEventListener('load', setClickEvent);
+window.addEventListener('load', carregarNavbar);
+window.addEventListener('load', exibirEventos);
 
-function loadNavbar() {
+document.addEventListener("DOMContentLoaded", function () {
+    window.addEventListener("load", function () {
+        setTimeout(configuracaoAcessibilidadeBotoes, 500);
+    });
+});
+
+function carregarNavbar() {
     fetch('navbar.html')
         .then(response => response.text())
         .then(data => {
@@ -11,22 +16,7 @@ function loadNavbar() {
         .catch(error => console.error('Erro ao carregar a navbar:', error));
 }
 
-function setClickEvent() {
-    var navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-
-    navLinks.forEach(function (link) {
-        link.addEventListener('click', function () {
-            var navItems = document.querySelectorAll('.navbar-nav .nav-item');
-            navItems.forEach(function (item) {
-                item.classList.remove('active');
-            });
-
-            link.parentElement.classList.add('active');
-        });
-    });
-}
-
-function displayEvents() {
+function exibirEventos() {
     const eventsList = document.getElementById('events-list');
     if (!eventsList) {
         return;
@@ -92,15 +82,44 @@ function pesquisarEventos() {
     }
 }
 
+let currentCallback = null;
+
+function showModalConfirmacao(message, callback) {
+    const modal = document.getElementById("confirmModal");
+    const confirmMessage = document.getElementById("confirmMessage");
+    const confirmYes = document.getElementById("confirmYes");
+    const confirmNo = document.getElementById("confirmNo");
+
+    confirmMessage.textContent = message;
+    modal.style.display = "flex";
+
+    currentCallback = callback;
+
+    confirmYes.onclick = () => {
+        modal.style.display = "none";
+        if (currentCallback) currentCallback(true);
+    };
+
+    confirmNo.onclick = () => {
+        modal.style.display = "none";
+        if (currentCallback) currentCallback(false);
+    };
+}
+
 function deletarEvento(index) {
     let events = JSON.parse(localStorage.getItem('events')) || [];
     const nomeEvento = events[index].name;
 
-    events.splice(index, 1);
-    localStorage.setItem('events', JSON.stringify(events));
-    displayEvents();
-
-    showFeedback(`O evento ${nomeEvento} foi deletado com sucesso!`);
+    showModalConfirmacao(`Tem certeza que deseja excluir o evento "${nomeEvento}"?`, (confirmado) => {
+        if (confirmado) {
+            events.splice(index, 1);
+            localStorage.setItem('events', JSON.stringify(events));
+            exibirEventos();
+            showFeedback(`O evento "${nomeEvento}" foi deletado com sucesso!`);
+        } else {
+            showFeedback(`A exclusão do evento "${nomeEvento}" foi cancelada.`);
+        }
+    });
 }
 
 function showFeedback(message) {
@@ -160,9 +179,3 @@ function configuracaoAcessibilidadeBotoes() {
         console.error("Botões de acessibilidade não encontrados no DOM.");
     }
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    window.addEventListener("load", function () {
-        setTimeout(configuracaoAcessibilidadeBotoes, 500);
-    });
-});
