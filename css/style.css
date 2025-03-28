@@ -309,6 +309,7 @@ header h1 {
     padding: 50px;
     border-radius: 8px;
     width: 50%;
+    color: #000 !important;
 }
 
 .modal .modal-content button {
